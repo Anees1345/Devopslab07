@@ -37,8 +37,7 @@ jobs:
 
       - name: Build Angular for GitHub Pages
         working-directory: frontend
-        # Adjust base-href if your GitHub repository name differs
-        run: npx ng build --configuration production --base-href /${{ github.event.repository.name }}/
+        run: npx ng build --configuration production --base-href /Devopslab07/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

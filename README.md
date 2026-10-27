@@ -1,6 +1,6 @@
 # Pakistan Electric Bike & Scooter Price Prediction System
 
-[![Full-stack CI](https://github.com/YOUR_USERNAME/EV-Price-Prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/EV-Price-Prediction/actions)
+[![Full-stack CI](https://github.com/Anees1345/Devopslab07/actions/workflows/ci.yml/badge.svg)](https://github.com/Anees1345/Devopslab07/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-22.2-dd0031.svg)](https://angular.dev/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776ab.svg)](https://www.python.org/)
@@ -339,7 +339,7 @@ git add .
 git commit -m "feat: complete Pakistan EV price prediction system"
 
 # 3. Connect to your empty GitHub repository
-git remote add origin https://github.com/YOUR_USERNAME/EV-Price-Prediction.git
+git remote add origin https://github.com/Anees1345/Devopslab07.git
 
 # 4. Push main branch
 git push -u origin main
@@ -349,7 +349,7 @@ git push -u origin main
 1. Open your repository on GitHub: `Settings` → `Pages`.
 2. Under **Build and deployment** → **Source**, select **GitHub Actions**.
 3. Push to `main` triggers `.github/workflows/pages.yml`.
-4. Your site will be published at: `https://<YOUR_USERNAME>.github.io/EV-Price-Prediction/`
+4. Your site will be published at: `https://<Anees1345>.github.io/EV-Price-Prediction/`
 
 ---
 
@@ -369,3 +369,4 @@ git push -u origin main
 - [x] GitHub Actions CI workflow configured (`ci.yml`).
 - [x] GitHub Pages static deployment workflow configured (`pages.yml`).
 - [x] Static demo mode clearly disclosed when hosted on GitHub Pages.
+
