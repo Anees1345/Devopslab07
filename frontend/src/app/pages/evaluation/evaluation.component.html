@@ -1,0 +1,202 @@
+<div class="evaluation-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="badge-row">
+      <span class="badge primary-badge">Empirical Benchmarks</span>
+      <span class="badge info-badge">Cross-Validation & Holdout</span>
+    </div>
+    <h1 class="page-title">Model Evaluation & Benchmark Analysis</h1>
+    <p class="page-subtitle">Rigorous statistical comparison of machine learning regression algorithms fitted on the Pakistan EV dataset.</p>
+  </header>
+
+  <!-- Research Limitation Notice -->
+  <div class="alert-banner warning">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="alert-content">
+      <strong>Research Limitation Notice:</strong>
+      The model was trained on 35 verified records. Evaluation results are preliminary and may vary substantially with additional data. They do not guarantee real-world prediction accuracy across newly launched market vehicles.
+    </div>
+  </div>
+
+  <!-- Metric Definition Cards -->
+  <div class="metric-explainer-grid">
+    <div class="metric-card">
+      <div class="metric-badge">Metric 1</div>
+      <h3 class="metric-title">Mean Absolute Error (MAE)</h3>
+      <p class="metric-desc">
+        Measures the average magnitude of prediction errors in the original currency units (PKR). All individual differences are weighted equally. <strong>Lower MAE is better.</strong>
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-badge">Metric 2</div>
+      <h3 class="metric-title">Root Mean Squared Error (RMSE)</h3>
+      <p class="metric-desc">
+        Square root of the average squared errors. Because errors are squared before averaging, RMSE heavily penalizes large outlier mistakes. <strong>Lower RMSE is better.</strong>
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-badge">Metric 3</div>
+      <h3 class="metric-title">Coefficient of Determination (R²)</h3>
+      <p class="metric-desc">
+        Proportion of variance in EV price explained by the features relative to a naive mean baseline. A score of 1.0 is perfect; negative scores indicate worse performance than a simple average. <strong>Higher R² is better.</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 1: 5-Fold Cross Validation -->
+  <section class="card section-card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">1. Five-Fold Cross-Validation Performance</h2>
+        <p class="card-subtitle">K-Fold cross-validation (k=5, shuffle=True, random_state=42) on all 35 records</p>
+      </div>
+      <span class="card-tag">Selection Benchmark</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Algorithm</th>
+            <th>CV MAE (PKR)</th>
+            <th>CV RMSE (PKR)</th>
+            <th>CV R²</th>
+            <th>Selection Decision</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of cvResults; track item.model) {
+            <tr [class.selected-row]="item.selected">
+              <td>
+                <span class="rank-circle" [class.gold]="item.rank === 1">{{ item.rank }}</span>
+              </td>
+              <td>
+                <strong>{{ item.model }}</strong>
+                @if (item.selected) {
+                  <span class="status-pill selected">Selected for Deployment</span>
+                }
+              </td>
+              <td class="font-mono">{{ item.mae | pkrCurrency }}</td>
+              <td class="font-mono">{{ item.rmse | pkrCurrency }}</td>
+              <td class="font-mono" [class.text-danger]="item.r2 < 0">{{ item.r2 }}</td>
+              <td>
+                @if (item.selected) {
+                  <span class="text-success font-semibold">✓ Best Overall Generalization</span>
+                } @else if (item.r2 < 0) {
+                  <span class="text-danger">Overfitted / Collinear</span>
+                } @else {
+                  <span class="text-muted">Runner-up</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-box">
+      <h4 class="chart-box-title">Cross-Validation Error Comparison (MAE vs. RMSE)</h4>
+      <div class="canvas-wrap">
+        <canvas #cvComparisonChart></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Holdout Evaluation -->
+  <section class="card section-card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">2. Independent Holdout Test Evaluation</h2>
+        <p class="card-subtitle">Fitted on 28 training records (80%) and evaluated on 7 holdout records (20%)</p>
+      </div>
+      <span class="card-tag">Unseen Test Set</span>
+    </div>
+
+    <!-- Holdout KPIs -->
+    <div class="holdout-kpi-row">
+      <div class="holdout-kpi">
+        <span class="kpi-num">{{ holdoutStats.trainRecords }}</span>
+        <span class="kpi-text">Training Records</span>
+      </div>
+      <div class="holdout-kpi">
+        <span class="kpi-num">{{ holdoutStats.testRecords }}</span>
+        <span class="kpi-text">Holdout Test Records</span>
+      </div>
+      <div class="holdout-kpi">
+        <span class="kpi-num highlight">{{ holdoutStats.mae | pkrCurrency }}</span>
+        <span class="kpi-text">Holdout MAE</span>
+      </div>
+      <div class="holdout-kpi">
+        <span class="kpi-num">{{ holdoutStats.rmse | pkrCurrency }}</span>
+        <span class="kpi-text">Holdout RMSE</span>
+      </div>
+      <div class="holdout-kpi">
+        <span class="kpi-num highlight">{{ holdoutStats.r2 }}</span>
+        <span class="kpi-text">Holdout R² Score</span>
+      </div>
+    </div>
+
+    <!-- Holdout Table -->
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Sample #</th>
+            <th>Actual Market Price (PKR)</th>
+            <th>Predicted Price (PKR)</th>
+            <th>Absolute Error (PKR)</th>
+            <th>Relative % Error</th>
+            <th>Valuation Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sample of holdoutSamples; track $index) {
+            <tr>
+              <td><strong>Test #{{ $index + 1 }}</strong></td>
+              <td class="font-mono">{{ sample.actual | pkrCurrency }}</td>
+              <td class="font-mono">{{ sample.predicted | pkrCurrency }}</td>
+              <td class="font-mono">{{ sample.error | pkrCurrency }}</td>
+              <td class="font-mono">{{ sample.percentErr }}%</td>
+              <td>
+                @if (sample.percentErr < 5) {
+                  <span class="accuracy-badge high">Excellent (&lt;5%)</span>
+                } @else if (sample.percentErr < 15) {
+                  <span class="accuracy-badge mid">Good (&lt;15%)</span>
+                } @else {
+                  <span class="accuracy-badge low">Moderate (&gt;15%)</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-box">
+      <h4 class="chart-box-title">Holdout Absolute Error by Test Vehicle</h4>
+      <div class="canvas-wrap">
+        <canvas #errorDistChart></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodological Summary Card -->
+  <section class="card section-card info-summary-card">
+    <h3 class="info-title">Why Random Forest Was Selected Over Linear Regression</h3>
+    <p class="info-p">
+      The dataset features non-linear interactions: battery chemistry (Lithium-Ion vs. Lead Acid) combined with motor power (Watts) creates steep non-linear pricing step functions in Pakistan. Linear Regression suffered severely from multi-collinearity after One-Hot Encoding categorical features on a small dataset (resulting in a negative R² of -4.651).
+    </p>
+    <p class="info-p">
+      In contrast, the ensemble tree structure of <strong>Random Forest Regressor</strong> (300 estimators, min_samples_leaf=2) prevented extreme variance, captured categorical splits organically, and achieved the lowest pooled out-of-fold MAE (PKR 64,112).
+    </p>
+  </section>
+</div>

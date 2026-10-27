@@ -1,0 +1,36 @@
+brand,model,type,price_pkr,range_km,top_speed_kmph,motor_watts,battery_type,battery_capacity_ah,charging_time_hrs,warranty_months,curb_weight_kg
+Vlektra,Retro 1969,Motorcycle,619000,150,105,4000,Lithium-Ion,40,3.5,36,110
+Vlektra,Bolt,Motorcycle,549000,100,90,3000,Lithium-Ion,36,4.0,36,105
+Vlektra,Velocity 180 SE,Motorcycle,384000,180,85,2000,LiFePO4,36,3.5,36,108
+Vlektra,Retro,Motorcycle,339000,80,60,1500,LiFePO4,30,2.5,36,95
+Yadea,Velax H,Scooter,439000,80,65,2000,LiFePO4,36,4.0,36,102
+Yadea,T5,Scooter,248500,90,50,1200,Graphene TTFAR,28,7.0,24,98
+Evee,C1 Air,Scooter,308000,80,60,2000,Lithium-Ion,30,5.0,24,88
+Evee,S1 Pro,Scooter,272000,90,60,2000,Graphene,38,5.0,24,92
+Evee,Gen-Z,Scooter,185000,75,55,1200,Graphene,32,6.0,24,85
+Evee,Nisa,Scooter,162000,60,45,1000,Graphene,20,7.0,12,78
+Metro,Miku Super,Sport Scooter,545000,120,85,3000,Lithium-Ion,40,4.0,24,105
+Metro,E8S Pro,Scooter,330000,125,70,2000,Graphene TTFAR,38,5.0,24,95
+Metro,T9 Pro,Scooter,262000,105,50,1200,Graphene TTFAR,32,5.0,24,90
+Metro,Thrill,Scooter,197000,80,50,1200,Graphene,26,6.0,18,88
+MS Jaguar,E-125,Motorcycle,349900,150,80,2500,LiFePO4,40,2.5,60,98
+MS Jaguar,E-70 Supreme,Motorcycle,258900,100,70,1500,LiFePO4,30,2.0,60,82
+MS Jaguar,M1,Scooter,198000,100,60,1500,LiFePO4,30,3.0,36,80
+MS Jaguar,Miso,Scooter,153000,60,45,1000,Graphene,20,6.0,12,70
+Jolta Electric,JE-100L,Motorcycle,239900,100,60,1500,Graphene,32,3.0,20,90
+Jolta Electric,Storm Pro,Scooter,177900,80,55,1200,Graphene,24,7.0,20,85
+Jolta Electric,JE-70-L,Motorcycle,225900,80,55,1000,Graphene,28,4.0,20,88
+Okla,Ovega EV,Scooter,450000,215,120,4000,Lithium-Ion,50,4.0,36,115
+Okla,Omax,Scooter,699000,150,110,3500,Lithium-Ion,45,5.0,24,112
+Crown,Raftaar,Scooter,299000,110,90,4000,LiFePO4,40,5.0,36,100
+Crown,RoshniX,Scooter,270000,120,60,2200,LiFePO4,40,5.0,24,99
+Honda,Benly e,Scooter,900000,100,45,2800,Lithium-Ion,40,6.0,12,125
+Eveon,Pronto Plus,Scooter,182000,75,55,1200,Graphene,26,6.0,18,85
+Eveon,Leopard Pro,Scooter,282000,100,70,2000,Lithium-Ion,32,4.0,24,92
+TailG,Zippy,Scooter,123000,65,45,1000,Graphene,20,7.0,12,75
+Superstar,Icon,Scooter,245000,90,55,1500,Graphene,30,6.0,24,88
+Neon,M3,Sport Bike,128000,65,85,2000,Lead Acid,28,8.0,6,120
+Road Prince,E-Go,Motorcycle,220000,90,70,1500,Lithium-Ion,24,6.0,24,92
+Benza,Model X,Scooter,165000,70,50,1200,Graphene,26,6.0,12,86
+E-Turbo,Warrior,Motorcycle,450000,300,120,5000,Lithium-Ion,60,4.0,24,130
+E-Turbo,EVO,Motorcycle,410000,300,100,4000,Lithium-Ion,55,4.0,24,125

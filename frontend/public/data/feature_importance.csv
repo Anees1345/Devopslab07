@@ -1,0 +1,33 @@
+feature,importance
+num__motor_watts,0.36521703887059126
+num__curb_weight_kg,0.27952905154433316
+num__battery_capacity_ah,0.08446225601479584
+num__range_km,0.07116656281228807
+num__charging_time_hrs,0.07054499899798053
+num__top_speed_kmph,0.04248791916415515
+cat__battery_type_Lithium-Ion,0.04230403057405563
+num__warranty_months,0.02228145605726359
+cat__type_Scooter,0.008578252712292426
+cat__brand_Vlektra,0.004125536720245501
+cat__type_Motorcycle,0.0025148341407192384
+cat__brand_E-Turbo,0.001952582956528431
+cat__battery_type_Graphene,0.0019413037177947589
+cat__battery_type_LiFePO4,0.0017938409584707918
+cat__brand_Okla,0.0007184871933545726
+cat__brand_Jolta Electric,0.00013576741784415133
+cat__brand_Evee,0.00011406914457294454
+cat__battery_type_Graphene TTFAR,4.904906328209493e-05
+cat__brand_Crown,4.746034488704131e-05
+cat__brand_MS Jaguar,3.5501594544753745e-05
+cat__brand_Metro,0.0
+cat__brand_Honda,0.0
+cat__brand_Eveon,0.0
+cat__brand_Benza,0.0
+cat__brand_Yadea,0.0
+cat__brand_TailG,0.0
+cat__brand_Road Prince,0.0
+cat__brand_Superstar,0.0
+cat__brand_Neon,0.0
+cat__type_Sport Bike,0.0
+cat__type_Sport Scooter,0.0
+cat__battery_type_Lead Acid,0.0

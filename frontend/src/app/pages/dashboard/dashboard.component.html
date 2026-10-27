@@ -1,0 +1,228 @@
+<div class="dashboard-page">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="badge-row">
+        <span class="badge primary-badge">
+          <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          EV Mobility ML Research
+        </span>
+        <span class="badge warning-badge">Research Prototype • 35 Verified Records</span>
+      </div>
+      <h1 class="page-title">Pakistan EV Price Predictor</h1>
+      <p class="page-subtitle">Machine Learning-Based Electric Bike & Scooter Price Estimation and Market Valuation</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/predict" class="btn btn-primary">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        Predict EV Price
+      </a>
+      <a routerLink="/evaluation" class="btn btn-secondary">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10M12 20V4M6 20v-6"/>
+        </svg>
+        Model Benchmarks
+      </a>
+    </div>
+  </header>
+
+  <!-- KPI Grid -->
+  <section class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Dataset Size</span>
+        <span class="kpi-value">{{ stats.totalRecords }} Records</span>
+        <span class="kpi-note">100% verified Pakistani EV models</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-teal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Feature Schema</span>
+        <span class="kpi-value">{{ stats.totalColumns }} Columns</span>
+        <span class="kpi-note">10 features, target: <code>{{ stats.targetVariable }}</code></span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-navy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Market Median Price</span>
+        <span class="kpi-value">{{ stats.medianPricePkr | pkrCurrency }}</span>
+        <span class="kpi-note">Range: {{ stats.minPricePkr | pkrCurrency }} - {{ stats.maxPricePkr | pkrCurrency }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-emerald">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Selected Algorithm</span>
+        <span class="kpi-value text-sm">{{ stats.selectedAlgorithm }}</span>
+        <span class="kpi-note">Ranked #1 by 5-fold cross-validation</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">5-Fold CV MAE</span>
+        <span class="kpi-value">{{ stats.cvMaePkr | pkrCurrency }}</span>
+        <span class="kpi-note">Average absolute error across folds</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-box bg-purple">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">5-Fold CV R² Score</span>
+        <span class="kpi-value">{{ stats.cvR2 }}</span>
+        <span class="kpi-note">Holdout test R²: {{ stats.holdoutR2 }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research Disclaimer Callout -->
+  <div class="callout-card">
+    <div class="callout-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="callout-text">
+      <strong>Academic Research Prototype Notice:</strong>
+      This machine-learning regression system was fitted on 35 officially listed electric two-wheelers in Pakistan. The predictions and cross-validation statistics represent preliminary research findings and serve as an educational prototype, not certified market quotations.
+    </div>
+  </div>
+
+  <!-- Visual Charts Section -->
+  <section class="charts-grid">
+    <!-- Chart 1: Average Price by Vehicle Type -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">Average Price by Vehicle Type</h2>
+          <p class="chart-subtitle">Descriptive analysis across 35 Pakistani electric models</p>
+        </div>
+        <span class="chart-tag">Descriptive</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas #typePriceChart></canvas>
+      </div>
+      <div class="chart-footer">
+        Sport scooters command high premiums due to high-power Li-Ion batteries; standard scooters offer affordable urban commuting.
+      </div>
+    </div>
+
+    <!-- Chart 2: 5-Fold Cross Validation Algorithm Comparison -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">5-Fold Cross-Validation MAE Comparison</h2>
+          <p class="chart-subtitle">Comparing candidate regression models (Lower MAE is better)</p>
+        </div>
+        <span class="chart-tag">CV Benchmarks</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas #modelComparisonChart></canvas>
+      </div>
+      <div class="chart-footer">
+        Random Forest achieved the lowest pooled MAE of PKR 64,112, outperforming Extra Trees, Gradient Boosting, and Linear Regression.
+      </div>
+    </div>
+
+    <!-- Chart 3: Top Feature Importance -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">Random Forest Feature Importance</h2>
+          <p class="chart-subtitle">Mean Decrease in Impurity (MDI) extracted from fitted pipeline</p>
+        </div>
+        <span class="chart-tag">Pipeline Insights</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas #featureImpChart></canvas>
+      </div>
+      <div class="chart-footer">
+        Motor power (36.5%) and curb weight (28.0%) are the dominant drivers of electric vehicle pricing in the Pakistani market.
+      </div>
+    </div>
+
+    <!-- Chart 4: Actual vs Predicted Holdout -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h2 class="chart-title">Holdout Test: Actual vs. Predicted Prices</h2>
+          <p class="chart-subtitle">Independent 20% holdout test sample (7 unseen vehicles)</p>
+        </div>
+        <span class="chart-tag">Holdout Evaluation</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas #actualVsPredChart></canvas>
+      </div>
+      <div class="chart-footer">
+        Holdout MAE: PKR 39,755 and R²: 0.617. Dashed line denotes perfect theoretical prediction parity.
+      </div>
+    </div>
+  </section>
+
+  <!-- Static Research Plots Fallback -->
+  <section class="saved-plots-section">
+    <div class="section-header">
+      <h2 class="section-title">Saved Research Visualizations</h2>
+      <p class="section-subtitle">Plots generated during pipeline training and validation</p>
+    </div>
+    <div class="plots-grid">
+      <div class="plot-item">
+        <img src="images/price_distribution.png" alt="EV Price Distribution in Pakistan" class="plot-img" />
+        <div class="plot-caption">Figure 1: Electric Vehicle Price Distribution (PKR)</div>
+      </div>
+      <div class="plot-item">
+        <img src="images/model_comparison.png" alt="Candidate Model Comparison" class="plot-img" />
+        <div class="plot-caption">Figure 2: Cross-Validation Candidate Comparison</div>
+      </div>
+      <div class="plot-item">
+        <img src="images/feature_importance.png" alt="Feature Importance Weights" class="plot-img" />
+        <div class="plot-caption">Figure 3: Feature Importance Weight Distribution</div>
+      </div>
+      <div class="plot-item">
+        <img src="images/holdout_actual_vs_predicted.png" alt="Actual vs Predicted Holdout" class="plot-img" />
+        <div class="plot-caption">Figure 4: Holdout Actual vs. Predicted Price Curve</div>
+      </div>
+    </div>
+  </section>
+</div>

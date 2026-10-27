@@ -1,0 +1,168 @@
+<div class="about-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="badge-row">
+      <span class="badge primary-badge">System Documentation</span>
+      <span class="badge info-badge">Full-Stack ML Engineering</span>
+    </div>
+    <h1 class="page-title">About the EV Price Prediction System</h1>
+    <p class="page-subtitle">A comprehensive machine-learning web application for electric two-wheeler valuation in Pakistan.</p>
+  </header>
+
+  <!-- Project Overview & Motivation -->
+  <section class="card section-card">
+    <h2 class="card-title">1. Project Overview & Motivation</h2>
+    <div class="prose">
+      <p>
+        The automotive sector in Pakistan is currently undergoing a structural energy transition toward electric two-wheelers (scooters and motorcycles) driven by domestic fuel costs, urban emissions targets, and favorable import/assembly policies. However, the commercial EV landscape in Pakistan is fragmented, featuring emerging domestic assemblers (such as Vlektra, Evee, MS Jaguar, Metro, Okla, Crown, and Jolta) offering wide variations in battery technologies (Lithium-Ion, LiFePO4, Graphene) and motor powers.
+      </p>
+      <p>
+        This project implements an end-to-end full-stack machine learning solution to model EV prices in Pakistani Rupees (PKR) as a function of 10 verifiable physical and electrical specifications. It serves as an academic research prototype, university final-year project showcase, and professional DevOps portfolio artifact.
+      </p>
+    </div>
+  </section>
+
+  <!-- System Architecture Diagrams -->
+  <section class="card section-card">
+    <h2 class="card-title">2. System Architecture & Deployment Boundary</h2>
+    <p class="card-subtitle">Clear distinction between local full-stack inference and static GitHub Pages hosting</p>
+
+    <div class="architecture-flow-container">
+      <h3 class="flow-heading">A. Local Development & Inference Architecture</h3>
+      <div class="diagram-box">
+        <pre class="ascii-diagram">
++-------------------------------------------------------------+
+|                     User Web Browser                        |
+|             (http://localhost:4200 /predict)                |
++-------------------------------------------------------------+
+                              |
+                              | HTTP POST /api/predict (JSON)
+                              v
++-------------------------------------------------------------+
+|               Angular Development Proxy (CLI)               |
+|            (frontend/proxy.conf.json -> 127.0.0.1:5000)     |
++-------------------------------------------------------------+
+                              |
+                              | Forwards to /predict
+                              v
++-------------------------------------------------------------+
+|                  Python Flask REST API                      |
+|                  (backend/app.py:5000)                      |
+|                                                             |
+|   1. Request Validation (Keys, Numeric Ranges, Non-empty)   |
+|   2. Preprocessing Pipeline (SimpleImputer + OneHotEncoder) |
+|   3. Inference Model (RandomForestRegressor, 300 Trees)     |
+|   4. Response Serialization (Rounded integer PKR estimate)  |
++-------------------------------------------------------------+
+                              |
+                              | JSON: &#123;"prediction": 558243, "currency": "PKR"&#125;
+                              v
++-------------------------------------------------------------+
+|               Angular Standalone Result Panel               |
+|            Displays "PKR 558,243" + Specs Summary           |
++-------------------------------------------------------------+
+        </pre>
+      </div>
+
+      <h3 class="flow-heading">B. GitHub CI/CD & GitHub Pages Architecture</h3>
+      <div class="diagram-box">
+        <pre class="ascii-diagram">
++-------------------------------------------------------------+
+|                   Git Repository (Root)                     |
+|           (backend/, frontend/, data/, .github/)            |
++-------------------------------------------------------------+
+                              |
+                              | git push origin main
+                              v
++-------------------------------------------------------------+
+|                GitHub Actions Workflows                     |
+|                                                             |
+|   1. Full-stack CI (ci.yml)                                 |
+|      - Backend Job: Python 3.12, pytest test suite          |
+|      - Frontend Job: Node 24, npm ci, ng build production   |
+|                                                             |
+|   2. Pages Deployment (pages.yml)                           |
+|      - Builds static Angular SPA with base-href             |
+|      - Uploads browser artifact to GitHub Pages CDN         |
++-------------------------------------------------------------+
+                              |
+                              | Publishes static HTML/JS/CSS
+                              v
++-------------------------------------------------------------+
+|               Static GitHub Pages Site                      |
+|          (https://&lt;username&gt;.github.io/&lt;repo&gt;/)            |
+|                                                             |
+|   - Static Dashboard, Evaluation & Dataset browsing         |
+|   - Clearly discloses that live predictions require local   |
+|     Flask execution (Static Demo Mode notice).              |
++-------------------------------------------------------------+
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology Stack -->
+  <section class="card section-card">
+    <h2 class="card-title">3. Technology Stack Breakdown</h2>
+    <div class="tech-grid">
+      @for (tech of techStack; track tech.layer) {
+        <div class="tech-card">
+          <span class="tech-layer">{{ tech.layer }}</span>
+          <h4 class="tech-name">{{ tech.tech }}</h4>
+          <p class="tech-details">{{ tech.details }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Machine Learning Methodology -->
+  <section class="card section-card">
+    <h2 class="card-title">4. Machine Learning Methodology</h2>
+    <div class="methodology-steps">
+      <div class="m-step">
+        <div class="m-num">1</div>
+        <div class="m-content">
+          <h4>Data Collection & Quality Auditing</h4>
+          <p>Assembled 35 officially listed electric motorcycle and scooter models across Pakistani assemblers. Zero missing values and zero duplicate rows were verified.</p>
+        </div>
+      </div>
+
+      <div class="m-step">
+        <div class="m-num">2</div>
+        <div class="m-content">
+          <h4>Feature Engineering & Target Isolation</h4>
+          <p>The <code>model</code> commercial name was deliberately excluded from predictors to prevent ID memorization. The continuous target <code>price_pkr</code> was isolated.</p>
+        </div>
+      </div>
+
+      <div class="m-step">
+        <div class="m-num">3</div>
+        <div class="m-content">
+          <h4>Candidate Model Benchmarking</h4>
+          <p>Evaluated Linear Regression, Gradient Boosting, Extra Trees, and Random Forest using 5-fold cross-validation. Random Forest achieved the lowest out-of-fold MAE (PKR 64,112).</p>
+        </div>
+      </div>
+
+      <div class="m-step">
+        <div class="m-num">4</div>
+        <div class="m-content">
+          <h4>Pipeline Packaging & Serialization</h4>
+          <p>Packaged the complete fitted preprocessing (imputer + one-hot encoder) and fitted Random Forest into a unified scikit-learn Pipeline and serialized with <code>joblib</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Academic Disclaimer & Limitations -->
+  <section class="card section-card disclaimer-card">
+    <h2 class="card-title">5. Research Limitations & Responsible Use</h2>
+    <div class="prose">
+      <p>
+        <strong>Educational Research Disclaimer:</strong> This web application and machine learning model are provided strictly for educational and scientific research purposes. It is not an officially certified automotive appraisal or banking valuation tool.
+      </p>
+      <p>
+        <strong>Sample Size Limitation:</strong> Because the dataset comprises 35 vehicles, prediction variance can be elevated when evaluating atypical configurations, unlisted custom brands, or vehicles with extreme power-to-weight ratios.
+      </p>
+    </div>
+  </section>
+</div>

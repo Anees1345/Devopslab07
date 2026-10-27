@@ -1,0 +1,295 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* App Navbar */
+.app-navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.nav-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon-box {
+  width: 38px;
+  height: 38px;
+  background: #0284c7;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+}
+
+.brand-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0b1e36;
+  letter-spacing: -0.02em;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Desktop Navigation */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 860px) {
+  .nav-links {
+    display: none;
+  }
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+  color: #0284c7;
+  background: #f0f9ff;
+}
+
+.nav-item.active {
+  color: #0284c7;
+  background: #e0f2fe;
+}
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Nav Right & Status */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  font-size: 0.725rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.status-indicator.online {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-indicator.online .status-dot {
+  background: #22c55e;
+}
+
+.status-indicator.static {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-indicator.static .status-dot {
+  background: #f59e0b;
+}
+
+.mobile-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  color: #334155;
+}
+
+.mobile-toggle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+@media (max-width: 860px) {
+  .mobile-toggle {
+    display: block;
+  }
+}
+
+/* Mobile Nav Drawer */
+.mobile-nav-drawer {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 16px 20px;
+  border-top: 1px solid #f1f5f9;
+  background: white;
+}
+
+.mobile-nav-item {
+  padding: 10px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  text-decoration: none;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.mobile-nav-item.active {
+  color: #0284c7;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 28px 20px 48px 20px;
+}
+
+.content-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Footer */
+.app-footer {
+  background: #0b1e36;
+  color: #cbd5e1;
+  border-top: 1px solid #1e293b;
+  padding: 32px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-left {
+  max-width: 500px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.footer-icon {
+  width: 18px;
+  height: 18px;
+  color: #38bdf8;
+}
+
+.footer-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .footer-right {
+    align-items: flex-start;
+  }
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #93c5fd;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.725rem;
+  font-weight: 500;
+}
+
+.footer-copyright {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}

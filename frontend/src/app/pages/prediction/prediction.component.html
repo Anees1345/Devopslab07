@@ -1,0 +1,402 @@
+<div class="prediction-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="badge-row">
+      <span class="badge primary-badge">Inference Engine</span>
+      <span class="badge" [class.online-badge]="backendOnline && !isStatic" [class.offline-badge]="!backendOnline || isStatic">
+        {{ isStatic ? 'Static Demo Mode' : (backendOnline ? 'Flask Backend Connected' : 'Backend Disconnected') }}
+      </span>
+    </div>
+    <h1 class="page-title">Predict Your Electric Bike or Scooter Price</h1>
+    <p class="page-subtitle">Enter vehicle specifications to estimate its market valuation in Pakistani Rupees using the trained Random Forest model.</p>
+  </header>
+
+  <!-- Static Deployment Callout -->
+  @if (isStatic) {
+    <div class="alert-banner warning">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <strong>GitHub Pages Static Deployment Notice:</strong>
+        GitHub Pages hosts static assets only and does not execute Python Flask. To perform live predictions with the trained <code>ev_price_model.pkl</code> pipeline, clone the repository and run both Flask (Terminal 1) and Angular (Terminal 2) locally.
+      </div>
+    </div>
+  }
+
+  <!-- Backend Offline Callout -->
+  @if (!backendOnline && !isStatic) {
+    <div class="alert-banner danger">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <strong>Flask Backend Not Detected:</strong>
+        The Angular development proxy is unable to communicate with <code>http://127.0.0.1:5000</code>. Please start the backend server in Terminal 1 with <code>python backend/app.py</code>.
+      </div>
+    </div>
+  }
+
+  <!-- Main Error Banner -->
+  @if (errorMessage) {
+    <div class="alert-banner danger" role="alert">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <div class="alert-content">
+        {{ errorMessage }}
+      </div>
+    </div>
+  }
+
+  <!-- Layout: Form and Result -->
+  <div class="prediction-layout">
+    <!-- Input Form Card -->
+    <div class="card form-card">
+      <div class="card-header">
+        <div class="header-left">
+          <h2 class="card-title">Vehicle Specifications Input</h2>
+          <span class="card-hint">All 10 features correspond directly to the trained pipeline schema</span>
+        </div>
+        <div class="card-quick-actions">
+          <button type="button" class="btn btn-outline-sm" (click)="loadExample()">
+            <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            Load Example (Vlektra Retro)
+          </button>
+          <button type="button" class="btn btn-outline-sm" (click)="resetForm()">Reset</button>
+        </div>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" novalidate class="ev-form">
+        <!-- 1. Vehicle Details -->
+        <fieldset class="form-section">
+          <legend class="section-legend">
+            <span class="legend-num">1</span>
+            Vehicle Details
+          </legend>
+          <div class="form-grid-2">
+            <!-- Brand -->
+            <div class="form-group" [class.has-error]="validationErrors['brand']">
+              <label for="brand" class="form-label">
+                Brand / Manufacturer <span class="required-star">*</span>
+              </label>
+              <select id="brand" name="brand" class="form-control" [(ngModel)]="formValues['brand']">
+                <option [ngValue]="null" disabled>Select brand</option>
+                @for (opt of vehicleFields[0].options; track opt) {
+                  <option [ngValue]="opt">{{ opt }}</option>
+                }
+              </select>
+              @if (validationErrors['brand']) {
+                <span class="field-error">{{ validationErrors['brand'] }}</span>
+              }
+            </div>
+
+            <!-- Vehicle Type -->
+            <div class="form-group" [class.has-error]="validationErrors['type']">
+              <label for="type" class="form-label">
+                Vehicle Type <span class="required-star">*</span>
+              </label>
+              <select id="type" name="type" class="form-control" [(ngModel)]="formValues['type']">
+                <option [ngValue]="null" disabled>Select vehicle type</option>
+                @for (opt of vehicleFields[1].options; track opt) {
+                  <option [ngValue]="opt">{{ opt }}</option>
+                }
+              </select>
+              @if (validationErrors['type']) {
+                <span class="field-error">{{ validationErrors['type'] }}</span>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 2. Performance Specifications -->
+        <fieldset class="form-section">
+          <legend class="section-legend">
+            <span class="legend-num">2</span>
+            Performance Specifications
+          </legend>
+          <div class="form-grid-3">
+            <!-- Range -->
+            <div class="form-group" [class.has-error]="validationErrors['range_km']">
+              <label for="range_km" class="form-label">
+                Driving Range (km) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="range_km" type="number" name="range_km" class="form-control"
+                       [(ngModel)]="formValues['range_km']" min="10" max="500" step="5" placeholder="e.g. 150" />
+                <span class="unit-badge">km</span>
+              </div>
+              @if (validationErrors['range_km']) {
+                <span class="field-error">{{ validationErrors['range_km'] }}</span>
+              }
+            </div>
+
+            <!-- Top Speed -->
+            <div class="form-group" [class.has-error]="validationErrors['top_speed_kmph']">
+              <label for="top_speed_kmph" class="form-label">
+                Top Speed (km/h) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="top_speed_kmph" type="number" name="top_speed_kmph" class="form-control"
+                       [(ngModel)]="formValues['top_speed_kmph']" min="10" max="200" step="5" placeholder="e.g. 105" />
+                <span class="unit-badge">km/h</span>
+              </div>
+              @if (validationErrors['top_speed_kmph']) {
+                <span class="field-error">{{ validationErrors['top_speed_kmph'] }}</span>
+              }
+            </div>
+
+            <!-- Motor Power -->
+            <div class="form-group" [class.has-error]="validationErrors['motor_watts']">
+              <label for="motor_watts" class="form-label">
+                Motor Power (Watts) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="motor_watts" type="number" name="motor_watts" class="form-control"
+                       [(ngModel)]="formValues['motor_watts']" min="250" max="20000" step="100" placeholder="e.g. 4000" />
+                <span class="unit-badge">W</span>
+              </div>
+              @if (validationErrors['motor_watts']) {
+                <span class="field-error">{{ validationErrors['motor_watts'] }}</span>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 3. Battery Specifications -->
+        <fieldset class="form-section">
+          <legend class="section-legend">
+            <span class="legend-num">3</span>
+            Battery Specifications
+          </legend>
+          <div class="form-grid-3">
+            <!-- Battery Chemistry -->
+            <div class="form-group" [class.has-error]="validationErrors['battery_type']">
+              <label for="battery_type" class="form-label">
+                Battery Type <span class="required-star">*</span>
+              </label>
+              <select id="battery_type" name="battery_type" class="form-control" [(ngModel)]="formValues['battery_type']">
+                <option [ngValue]="null" disabled>Select chemistry</option>
+                @for (opt of batteryFields[0].options; track opt) {
+                  <option [ngValue]="opt">{{ opt }}</option>
+                }
+              </select>
+              @if (validationErrors['battery_type']) {
+                <span class="field-error">{{ validationErrors['battery_type'] }}</span>
+              }
+            </div>
+
+            <!-- Battery Capacity -->
+            <div class="form-group" [class.has-error]="validationErrors['battery_capacity_ah']">
+              <label for="battery_capacity_ah" class="form-label">
+                Battery Capacity (Ah) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="battery_capacity_ah" type="number" name="battery_capacity_ah" class="form-control"
+                       [(ngModel)]="formValues['battery_capacity_ah']" min="5" max="150" step="1" placeholder="e.g. 40" />
+                <span class="unit-badge">Ah</span>
+              </div>
+              @if (validationErrors['battery_capacity_ah']) {
+                <span class="field-error">{{ validationErrors['battery_capacity_ah'] }}</span>
+              }
+            </div>
+
+            <!-- Charging Time -->
+            <div class="form-group" [class.has-error]="validationErrors['charging_time_hrs']">
+              <label for="charging_time_hrs" class="form-label">
+                Charging Time (Hours) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="charging_time_hrs" type="number" name="charging_time_hrs" class="form-control"
+                       [(ngModel)]="formValues['charging_time_hrs']" min="0.5" max="20" step="0.5" placeholder="e.g. 3.5" />
+                <span class="unit-badge">hrs</span>
+              </div>
+              @if (validationErrors['charging_time_hrs']) {
+                <span class="field-error">{{ validationErrors['charging_time_hrs'] }}</span>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 4. Additional Specifications -->
+        <fieldset class="form-section">
+          <legend class="section-legend">
+            <span class="legend-num">4</span>
+            Additional Specifications
+          </legend>
+          <div class="form-grid-2">
+            <!-- Warranty -->
+            <div class="form-group" [class.has-error]="validationErrors['warranty_months']">
+              <label for="warranty_months" class="form-label">
+                Warranty (Months) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="warranty_months" type="number" name="warranty_months" class="form-control"
+                       [(ngModel)]="formValues['warranty_months']" min="0" max="120" step="6" placeholder="e.g. 36" />
+                <span class="unit-badge">mo</span>
+              </div>
+              @if (validationErrors['warranty_months']) {
+                <span class="field-error">{{ validationErrors['warranty_months'] }}</span>
+              }
+            </div>
+
+            <!-- Curb Weight -->
+            <div class="form-group" [class.has-error]="validationErrors['curb_weight_kg']">
+              <label for="curb_weight_kg" class="form-label">
+                Curb Weight (kg) <span class="required-star">*</span>
+              </label>
+              <div class="input-with-unit">
+                <input id="curb_weight_kg" type="number" name="curb_weight_kg" class="form-control"
+                       [(ngModel)]="formValues['curb_weight_kg']" min="30" max="300" step="1" placeholder="e.g. 110" />
+                <span class="unit-badge">kg</span>
+              </div>
+              @if (validationErrors['curb_weight_kg']) {
+                <span class="field-error">{{ validationErrors['curb_weight_kg'] }}</span>
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Form Controls -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading || isStatic">
+            @if (loading) {
+              <span class="spinner"></span>
+              Computing Estimation...
+            } @else {
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              Predict EV Price
+            }
+          </button>
+
+          <button type="button" class="btn btn-secondary" (click)="resetForm()" [disabled]="loading">
+            Reset Form
+          </button>
+
+          @if (result) {
+            <button type="button" class="btn btn-outline" (click)="clearResults()">
+              Clear Results
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+
+    <!-- Prediction Result Panel -->
+    <div class="result-container">
+      @if (result) {
+        <div class="card result-card animated-fade-in">
+          <div class="result-badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            Inference Success
+          </div>
+
+          <span class="result-label">Estimated Vehicle Price</span>
+          <div class="result-price">
+            {{ result.prediction | pkrCurrency }}
+          </div>
+
+          <div class="model-meta-box">
+            <div class="meta-row">
+              <span class="meta-title">Inference Model:</span>
+              <span class="meta-val highlight">{{ result.model }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-title">Task Type:</span>
+              <span class="meta-val">{{ result.task | uppercase }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-title">Currency:</span>
+              <span class="meta-val">{{ result.currency }}</span>
+            </div>
+          </div>
+
+          <!-- Submitted Specification Summary -->
+          @if (submittedPayload) {
+            <div class="spec-summary-section">
+              <h3 class="summary-heading">Submitted Specification Profile</h3>
+              <div class="specs-chips">
+                <span class="chip"><strong>Brand:</strong> {{ submittedPayload.brand }}</span>
+                <span class="chip"><strong>Type:</strong> {{ submittedPayload.type }}</span>
+                <span class="chip"><strong>Range:</strong> {{ submittedPayload.range_km }} km</span>
+                <span class="chip"><strong>Speed:</strong> {{ submittedPayload.top_speed_kmph }} km/h</span>
+                <span class="chip"><strong>Motor:</strong> {{ submittedPayload.motor_watts }} W</span>
+                <span class="chip"><strong>Battery:</strong> {{ submittedPayload.battery_type }}</span>
+                <span class="chip"><strong>Capacity:</strong> {{ submittedPayload.battery_capacity_ah }} Ah</span>
+                <span class="chip"><strong>Charging:</strong> {{ submittedPayload.charging_time_hrs }} hrs</span>
+                <span class="chip"><strong>Warranty:</strong> {{ submittedPayload.warranty_months }} mo</span>
+                <span class="chip"><strong>Weight:</strong> {{ submittedPayload.curb_weight_kg }} kg</span>
+              </div>
+            </div>
+          }
+
+          <!-- Disclaimer Box -->
+          <div class="result-disclaimer">
+            <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <p>{{ result.disclaimer }} Model trained on 35 empirical records; real commercial quotations may vary.</p>
+          </div>
+
+          <div class="result-card-actions">
+            <button class="btn btn-secondary w-full" (click)="clearResults()">
+              Make Another Prediction
+            </button>
+          </div>
+        </div>
+      } @else {
+        <!-- Empty State Card -->
+        <div class="card empty-card">
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="empty-title">Ready for Valuation</h3>
+          <p class="empty-desc">
+            Complete the 10 specifications on the left or click <strong>Load Example</strong> to test with a verified Pakistani electric motorcycle.
+          </p>
+          <div class="empty-quick-steps">
+            <div class="step-row">
+              <span class="step-num">1</span>
+              <span>Fill vehicle power, battery, and dimensions</span>
+            </div>
+            <div class="step-row">
+              <span class="step-num">2</span>
+              <span>Click "Predict EV Price" to execute pipeline</span>
+            </div>
+            <div class="step-row">
+              <span class="step-num">3</span>
+              <span>Review valuation and comparative analysis</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

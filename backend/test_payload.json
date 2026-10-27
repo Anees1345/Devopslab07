@@ -1,0 +1,12 @@
+{
+  "brand": "Vlektra",
+  "type": "Motorcycle",
+  "range_km": 150,
+  "top_speed_kmph": 105,
+  "motor_watts": 4000,
+  "battery_type": "Lithium-Ion",
+  "battery_capacity_ah": 40,
+  "charging_time_hrs": 3.5,
+  "warranty_months": 36,
+  "curb_weight_kg": 110
+}

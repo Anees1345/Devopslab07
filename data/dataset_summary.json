@@ -1,0 +1,33 @@
+{
+  "dataset_file": "Pakistan_EV_Bikes_2026.csv",
+  "rows": 35,
+  "columns": 12,
+  "target": "price_pkr",
+  "excluded_feature": "model (unique model names, 35/35 unique)",
+  "features_used": [
+    "brand",
+    "type",
+    "range_km",
+    "top_speed_kmph",
+    "motor_watts",
+    "battery_type",
+    "battery_capacity_ah",
+    "charging_time_hrs",
+    "warranty_months",
+    "curb_weight_kg"
+  ],
+  "missing_values_total": 0,
+  "duplicate_rows": 0,
+  "target_min_pkr": 123000,
+  "target_median_pkr": 270000,
+  "target_max_pkr": 900000,
+  "sklearn_version": "1.8.0",
+  "selected_model": "Random Forest",
+  "selection_rule": "lowest pooled out-of-fold MAE in shuffled 5-fold cross-validation",
+  "holdout": {
+    "rows": 7,
+    "MAE_PKR": 39755.40627362053,
+    "RMSE_PKR": 53861.42289690271,
+    "R2": 0.6168427958559894
+  }
+}

@@ -1,0 +1,217 @@
+<div class="dataset-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="badge-row">
+      <span class="badge primary-badge">Data Inventory</span>
+      <span class="badge info-badge">Pakistan_EV_Bikes_2026.csv</span>
+    </div>
+    <h1 class="page-title">Dataset Architecture & Schema Analysis</h1>
+    <p class="page-subtitle">Detailed documentation of the 35 verified electric vehicle records, preprocessing methodology, and column specifications.</p>
+  </header>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards-grid">
+    <div class="summary-card">
+      <span class="sum-label">Source File</span>
+      <span class="sum-val font-mono">Pakistan_EV_Bikes_2026.csv</span>
+      <span class="sum-desc">Supervised ML regression dataset</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="sum-label">Sample Volume</span>
+      <span class="sum-val">35 Records</span>
+      <span class="sum-desc">0 Missing Values, 0 Duplicates</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="sum-label">Feature Count</span>
+      <span class="sum-val">10 Predictors + 1 Target</span>
+      <span class="sum-desc">1 column (<code>model</code>) excluded</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="sum-label">Target Variable</span>
+      <span class="sum-val font-mono">price_pkr</span>
+      <span class="sum-desc">Pakistani Rupees (continuous numeric)</span>
+    </div>
+  </div>
+
+  <!-- Section: Preprocessing & Data Preparation -->
+  <section class="card section-card">
+    <h2 class="card-title">Data Preparation & Pipeline Preprocessing</h2>
+    <p class="card-subtitle">Fitted using scikit-learn <code>ColumnTransformer</code> and serialized with <code>joblib</code></p>
+
+    <div class="pipeline-explainer">
+      <div class="pipe-step">
+        <div class="step-badge">Numeric Branch (7 Features)</div>
+        <div class="pipe-box">
+          <h4>Median Imputation</h4>
+          <p>Features: <code>range_km</code>, <code>top_speed_kmph</code>, <code>motor_watts</code>, <code>battery_capacity_ah</code>, <code>charging_time_hrs</code>, <code>warranty_months</code>, <code>curb_weight_kg</code>.</p>
+          <span class="pipe-note">Handled via <code>SimpleImputer(strategy='median')</code>.</span>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="step-badge">Categorical Branch (3 Features)</div>
+        <div class="pipe-box">
+          <h4>One-Hot Encoding with Unknown Handling</h4>
+          <p>Features: <code>brand</code>, <code>type</code>, <code>battery_type</code>.</p>
+          <span class="pipe-note">Handled via <code>OneHotEncoder(handle_unknown='ignore')</code> to gracefully accept unseen future brands.</span>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="step-badge">Excluded Feature</div>
+        <div class="pipe-box">
+          <h4>Unique Model Name Exclusion</h4>
+          <p>The <code>model</code> column contains 35/35 unique names (e.g. <em>Retro 1969</em>, <em>Bolt</em>, <em>Benly e</em>). It was intentionally removed from training to prevent memorization/overfitting and force the model to learn physical & electrical cost drivers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Data Dictionary Table -->
+  <section class="card section-card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Complete 12-Column Data Dictionary</h2>
+        <p class="card-subtitle">Original dataset columns, datatypes, units, and training pipeline roles</p>
+      </div>
+      <span class="card-tag">Schema Definition</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Column Name</th>
+            <th>Type</th>
+            <th>Unit</th>
+            <th>Pipeline Role</th>
+            <th>Field Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of dictionary; track item.col) {
+            <tr>
+              <td><code class="col-code">{{ item.col }}</code></td>
+              <td><span class="type-pill" [class.cat]="item.type === 'Categorical'">{{ item.type }}</span></td>
+              <td class="font-mono">{{ item.unit }}</td>
+              <td>
+                <span class="role-pill"
+                      [class.target]="item.role.startsWith('Target')"
+                      [class.excluded]="item.role === 'Excluded'">
+                  {{ item.role }}
+                </span>
+              </td>
+              <td>{{ item.desc }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section: Descriptive Statistics -->
+  <section class="card section-card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Descriptive Summary Statistics</h2>
+        <p class="card-subtitle">Empirical ranges and central tendencies across all 35 records</p>
+      </div>
+      <span class="card-tag">Descriptive Metrics</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Feature / Variable</th>
+            <th>Minimum</th>
+            <th>Median</th>
+            <th>Mean</th>
+            <th>Maximum</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of summaryStats; track stat.metric) {
+            <tr>
+              <td><strong>{{ stat.metric }}</strong></td>
+              <td class="font-mono">{{ stat.min }}</td>
+              <td class="font-mono highlight-col">{{ stat.median }}</td>
+              <td class="font-mono">{{ stat.mean }}</td>
+              <td class="font-mono">{{ stat.max }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section: Verified Dataset Records Table -->
+  <section class="card section-card">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Verified Empirical Dataset Records (35 Models)</h2>
+        <p class="card-subtitle">Official consumer specifications collected from Pakistani EV assemblers & distributors</p>
+      </div>
+      <div class="filter-controls">
+        <input type="text" placeholder="Search brand, model, battery..." class="search-input" [(ngModel)]="searchQuery" />
+        <select class="type-select" [(ngModel)]="selectedType">
+          <option value="ALL">All Vehicle Types</option>
+          <option value="Motorcycle">Motorcycles</option>
+          <option value="Scooter">Scooters</option>
+          <option value="Sport Scooter">Sport Scooters</option>
+          <option value="Sport Bike">Sport Bikes</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Price (PKR)</th>
+            <th>Range</th>
+            <th>Top Speed</th>
+            <th>Motor</th>
+            <th>Battery</th>
+            <th>Capacity</th>
+            <th>Charge</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of filteredDataset; track $index) {
+            <tr>
+              <td>{{ $index + 1 }}</td>
+              <td><strong>{{ row.brand }}</strong></td>
+              <td class="text-muted">{{ row.model }}</td>
+              <td><span class="type-badge">{{ row.type }}</span></td>
+              <td class="font-mono font-semibold">{{ row.price_pkr | pkrCurrency }}</td>
+              <td class="font-mono">{{ row.range_km }} km</td>
+              <td class="font-mono">{{ row.top_speed_kmph }} km/h</td>
+              <td class="font-mono">{{ row.motor_watts }} W</td>
+              <td><span class="chem-badge">{{ row.battery_type }}</span></td>
+              <td class="font-mono">{{ row.battery_capacity_ah }} Ah</td>
+              <td class="font-mono">{{ row.charging_time_hrs }} h</td>
+              <td class="font-mono">{{ row.curb_weight_kg }} kg</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-privacy-notice">
+      <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <span><strong>Research Notice:</strong> Direct CSV dataset download is restricted to academic evaluation purposes.</span>
+    </div>
+  </section>
+</div>
